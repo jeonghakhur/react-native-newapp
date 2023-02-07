@@ -2360,6 +2360,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-navigation/native-stack@npm:^6.9.9":
+  version: 6.9.9
+  resolution: "@react-navigation/native-stack@npm:6.9.9"
+  dependencies:
+    "@react-navigation/elements": ^1.3.14
+    warn-once: ^0.1.0
+  peerDependencies:
+    "@react-navigation/native": ^6.0.0
+    react: "*"
+    react-native: "*"
+    react-native-safe-area-context: ">= 3.0.0"
+    react-native-screens: ">= 3.0.0"
+  checksum: 03bdb6e990fbc5146642b2a2007a3ef73793bc9151a89bc64b86ca5ecf16c509eec865d2443eb87a72ada146e7c54441c552c69e7971a13d81c7117e97f8eeb7
+  languageName: node
+  linkType: hard
+
 "@react-navigation/native@npm:^6.1.3":
   version: 6.1.3
   resolution: "@react-navigation/native@npm:6.1.3"
@@ -6708,6 +6724,7 @@ __metadata:
     "@babel/core": ^7.12.9
     "@react-navigation/bottom-tabs": ^6.5.4
     "@react-navigation/native": ^6.1.3
+    "@react-navigation/native-stack": ^6.9.9
     expo: ~47.0.12
     expo-splash-screen: ~0.17.5
     expo-status-bar: ~1.4.2

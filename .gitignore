@@ -58,3 +58,4 @@ dist/
 #use
 .yarn
 *.lock
+*.gz
