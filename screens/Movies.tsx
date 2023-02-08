@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { ActivityIndicator, Dimensions } from "react-native";
+import { ActivityIndicator, Dimensions, RefreshControl } from "react-native";
 import Swiper from "react-native-swiper";
 import styled from "styled-components/native";
-import Poster from "../components/Poster";
 import Slide from "../components/Slide";
+import VMedia from "../components/VMedia";
+import HMedia from "../components/HMedia";
 
 const API_KEY = "384d29bebc04dc98585d34fedfd22ea6";
 
@@ -32,25 +33,10 @@ const TrendingScroll = styled.ScrollView`
   margin-right: 16px;
 `;
 
-const Movie = styled.View`
-  margin-right: 20px;
-  align-items: center;
-`;
-
-const Title = styled.Text`
-  font-weight: 600;
-  margin-top: 7px;
-  margin-bottom: 5px;
-  color: ${(props) => props.theme.textColor};
-`;
-const Votes = styled.Text`
-  font-size: 10px;
-  color: ${(props) => props.theme.textColor};
-`;
-
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
+  const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [nowPlaying, setNowPlaying] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
@@ -93,12 +79,22 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
     getData();
   }, []);
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getData();
+    setRefreshing(false);
+  };
+
   return loading ? (
     <Loader>
       <ActivityIndicator />
     </Loader>
   ) : (
-    <Container>
+    <Container
+      refreshControl={
+        <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+      }
+    >
       <Swiper
         showsPagination={false}
         containerStyle={{ width: "100%", height: SCREEN_HEIGHT / 4 }}
@@ -117,16 +113,24 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
       <ListTitle>Trending Movies</ListTitle>
       <TrendingScroll horizontal>
         {trending.map((movie) => (
-          <Movie key={movie.id}>
-            <Poster path={movie.poster_path} />
-            <Title>
-              {movie.original_title.slice(0, 13)}
-              {movie.original_title.length > 13 ? "..." : null}
-            </Title>
-            <Votes>⭐️ {movie.vote_average}/10</Votes>
-          </Movie>
+          <VMedia
+            key={movie.id}
+            posterPath={movie.poster_path}
+            originalTitle={movie.original_title}
+            voteAverage={movie.vote_average}
+          />
         ))}
       </TrendingScroll>
+      <ListTitle>Coming soon</ListTitle>
+      {upcoming.map((movie) => (
+        <HMedia
+          key={movie.id}
+          posterPath={movie.poster_path}
+          originalTitle={movie.original_title}
+          overview={movie.overview}
+          releaseDate={movie.release_date}
+        />
+      ))}
     </Container>
   );
 };
