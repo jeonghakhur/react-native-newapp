@@ -3,12 +3,14 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ActivityIndicator, Dimensions } from "react-native";
 import Swiper from "react-native-swiper";
 import styled from "styled-components/native";
+import Poster from "../components/Poster";
 import Slide from "../components/Slide";
 
 const API_KEY = "384d29bebc04dc98585d34fedfd22ea6";
 
 const Container = styled.ScrollView`
   background-color: ${(props) => props.theme.mainBgColor};
+  color: ${(props) => props.theme.textColor};
 `;
 
 const Loader = styled.View`
@@ -16,6 +18,34 @@ const Loader = styled.View`
   justify-content: center;
   align-items: center;
   background-color: ${(props) => props.theme.mainBgColor};
+`;
+
+const ListTitle = styled.Text`
+  font-size: 20px;
+  font-weight: 600;
+  margin: 16px;
+  color: ${(props) => props.theme.textColor};
+`;
+
+const TrendingScroll = styled.ScrollView`
+  margin-left: 16px;
+  margin-right: 16px;
+`;
+
+const Movie = styled.View`
+  margin-right: 20px;
+  align-items: center;
+`;
+
+const Title = styled.Text`
+  font-weight: 600;
+  margin-top: 7px;
+  margin-bottom: 5px;
+  color: ${(props) => props.theme.textColor};
+`;
+const Votes = styled.Text`
+  font-size: 10px;
+  color: ${(props) => props.theme.textColor};
 `;
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
@@ -84,6 +114,19 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
           />
         ))}
       </Swiper>
+      <ListTitle>Trending Movies</ListTitle>
+      <TrendingScroll horizontal>
+        {trending.map((movie) => (
+          <Movie key={movie.id}>
+            <Poster path={movie.poster_path} />
+            <Title>
+              {movie.original_title.slice(0, 13)}
+              {movie.original_title.length > 13 ? "..." : null}
+            </Title>
+            <Votes>⭐️ {movie.vote_average}/10</Votes>
+          </Movie>
+        ))}
+      </TrendingScroll>
     </Container>
   );
 };
