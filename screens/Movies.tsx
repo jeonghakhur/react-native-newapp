@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { ActivityIndicator, Dimensions, RefreshControl } from "react-native";
+import {
+  ActivityIndicator,
+  Dimensions,
+  FlatList,
+  View,
+  Text,
+} from "react-native";
 import Swiper from "react-native-swiper";
 import styled from "styled-components/native";
 import Slide from "../components/Slide";
@@ -28,9 +34,8 @@ const ListTitle = styled.Text`
   color: ${(props) => props.theme.textColor};
 `;
 
-const TrendingScroll = styled.ScrollView`
-  margin-left: 16px;
-  margin-right: 16px;
+const TrendingScroll = styled.FlatList`
+  padding: 0 8px;
 `;
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
@@ -90,11 +95,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
       <ActivityIndicator />
     </Loader>
   ) : (
-    <Container
-      refreshControl={
-        <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
-      }
-    >
+    <Container>
       <Swiper
         showsPagination={false}
         containerStyle={{ width: "100%", height: SCREEN_HEIGHT / 4 }}
@@ -111,26 +112,32 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
         ))}
       </Swiper>
       <ListTitle>Trending Movies</ListTitle>
-      <TrendingScroll horizontal>
-        {trending.map((movie) => (
+      <TrendingScroll
+        data={trending}
+        horizontal
+        keyExtractor={(item) => item.id}
+        showsHorizontalScrollIndicator={false}
+        renderItem={({ item }) => (
           <VMedia
+            posterPath={item.poster_path}
+            originalTitle={item.original_title}
+            voteAverage={item.vote_average}
+          />
+        )}
+      />
+
+      <ListTitle>Coming soon</ListTitle>
+      <TrendingScroll>
+        {upcoming.map((movie) => (
+          <HMedia
             key={movie.id}
             posterPath={movie.poster_path}
             originalTitle={movie.original_title}
-            voteAverage={movie.vote_average}
+            overview={movie.overview}
+            releaseDate={movie.release_date}
           />
         ))}
       </TrendingScroll>
-      <ListTitle>Coming soon</ListTitle>
-      {upcoming.map((movie) => (
-        <HMedia
-          key={movie.id}
-          posterPath={movie.poster_path}
-          originalTitle={movie.original_title}
-          overview={movie.overview}
-          releaseDate={movie.release_date}
-        />
-      ))}
     </Container>
   );
 };

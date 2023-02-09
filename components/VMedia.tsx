@@ -4,7 +4,7 @@ import Poster from "./Poster";
 import Votes from "./Votes";
 
 const Movie = styled.View`
-  margin-right: 20px;
+  margin: 0 8px;
   align-items: center;
 `;
 
