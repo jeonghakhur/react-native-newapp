@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { ActivityIndicator, Dimensions, FlatList } from "react-native";
+import { ActivityIndicator, Dimensions } from "react-native";
 import Swiper from "react-native-swiper";
-import styled from "styled-components/native";
+import styled from "styled-components";
 import Slide from "../components/Slide";
 import VMedia from "../components/VMedia";
 import HMedia from "../components/HMedia";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { moviesApi } from "../api";
 
 const Container = styled.FlatList`
@@ -35,21 +35,24 @@ const TrendingScroll = styled.FlatList`
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
-  const [refreshing, setRefreshing] = useState(false);
-  const { isLoading: nowPlayingLoading, data: nowPlayingData } = useQuery(
-    "nowPlaying",
-    moviesApi.nowPlaying
-  );
-  const { isLoading: upcomingLoading, data: upcomingData } = useQuery(
-    "upcoming",
-    moviesApi.upcoming
-  );
-  const { isLoading: trendingLoading, data: trendingData } = useQuery(
-    "trending",
-    moviesApi.trending
-  );
+  const queryClient = useQueryClient();
+  const {
+    isLoading: nowPlayingLoading,
+    data: nowPlayingData,
+    isRefetching: isRefetchingNowPlaying,
+  } = useQuery(["movies", "nowPlaying"], moviesApi.nowPlaying);
+  const {
+    isLoading: upcomingLoading,
+    data: upcomingData,
+    isRefetching: isRefetchingUpcoming,
+  } = useQuery(["movies", "upcoming"], moviesApi.upcoming);
+  const {
+    isLoading: trendingLoading,
+    data: trendingData,
+    isRefetching: isRefetchingTrending,
+  } = useQuery(["movies", "trending"], moviesApi.trending);
   const onRefresh = async () => {
-    console.log(refreshing);
+    queryClient.refetchQueries(["movies"]);
   };
 
   const renderVMedia = ({ item }) => (
@@ -69,7 +72,9 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
   );
   const movieKeyExtractor = (item) => item.id;
   const loading = nowPlayingLoading || upcomingLoading || trendingLoading;
-
+  const refreshing =
+    isRefetchingNowPlaying || isRefetchingUpcoming || isRefetchingTrending;
+  console.log(refreshing);
   return loading ? (
     <Loader>
       <ActivityIndicator />
