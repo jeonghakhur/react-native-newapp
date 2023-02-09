@@ -15,7 +15,7 @@ import HMedia from "../components/HMedia";
 
 const API_KEY = "384d29bebc04dc98585d34fedfd22ea6";
 
-const Container = styled.ScrollView`
+const Container = styled.FlatList`
   background-color: ${(props) => props.theme.mainBgColor};
   color: ${(props) => props.theme.textColor};
 `;
@@ -95,50 +95,57 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
       <ActivityIndicator />
     </Loader>
   ) : (
-    <Container>
-      <Swiper
-        showsPagination={false}
-        containerStyle={{ width: "100%", height: SCREEN_HEIGHT / 4 }}
-      >
-        {nowPlaying.map((movie) => (
-          <Slide
-            key={movie.id}
-            backdropPath={movie.backdrop_path}
-            posterPath={movie.poster_path}
-            originalTitle={movie.original_title}
-            voteAverage={movie.vote_average}
-            overview={movie.overview}
+    <Container
+      onRefresh={onRefresh}
+      refreshing={refreshing}
+      ListHeaderComponent={
+        <>
+          <Swiper
+            horizontal
+            showsButtons={false}
+            showsPagination={false}
+            containerStyle={{
+              height: SCREEN_HEIGHT / 4,
+            }}
+          >
+            {nowPlaying.map((movie) => (
+              <Slide
+                key={movie.id}
+                backdropPath={movie.backdrop_path}
+                posterPath={movie.poster_path}
+                originalTitle={movie.original_title}
+                voteAverage={movie.vote_average}
+                overview={movie.overview}
+              />
+            ))}
+          </Swiper>
+          <ListTitle>Trending Movies</ListTitle>
+          <TrendingScroll
+            data={trending}
+            horizontal
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <VMedia
+                posterPath={item.poster_path}
+                originalTitle={item.original_title}
+                voteAverage={item.vote_average}
+              />
+            )}
           />
-        ))}
-      </Swiper>
-      <ListTitle>Trending Movies</ListTitle>
-      <TrendingScroll
-        data={trending}
-        horizontal
-        keyExtractor={(item) => item.id}
-        showsHorizontalScrollIndicator={false}
-        renderItem={({ item }) => (
-          <VMedia
-            posterPath={item.poster_path}
-            originalTitle={item.original_title}
-            voteAverage={item.vote_average}
-          />
-        )}
-      />
-
-      <ListTitle>Coming soon</ListTitle>
-      <TrendingScroll>
-        {upcoming.map((movie) => (
-          <HMedia
-            key={movie.id}
-            posterPath={movie.poster_path}
-            originalTitle={movie.original_title}
-            overview={movie.overview}
-            releaseDate={movie.release_date}
-          />
-        ))}
-      </TrendingScroll>
-    </Container>
+          <ListTitle>Coming soon</ListTitle>
+        </>
+      }
+      data={upcoming}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item, index }) => (
+        <HMedia
+          posterPath={item.poster_path}
+          originalTitle={index + " " + item.original_title}
+          overview={item.overview}
+          releaseDate={item.release_date}
+        />
+      )}
+    />
   );
 };
 export default Movies;

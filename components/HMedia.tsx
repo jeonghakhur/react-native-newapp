@@ -54,8 +54,8 @@ const HMedia: React.FC<HMediaProps> = ({
       <Poster path={posterPath} />
       <HColumn>
         <Title>
-          {originalTitle.length > 30
-            ? `${originalTitle.slice(0, 30)}...`
+          {originalTitle.length > 20
+            ? `${originalTitle.slice(0, 20)}...`
             : originalTitle}
         </Title>
         {releaseDate ? (
