@@ -9,7 +9,7 @@ const Movie = styled.View`
 `;
 
 const Title = styled.Text`
-  color: ${(props) => props.theme.textColor}
+  color: ${(props) => props.theme.textColor};
   font-weight: 600;
   margin-top: 7px;
   margin-bottom: 5px;
