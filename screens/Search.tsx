@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useQuery } from "react-query";
-import { StyleSheet, SafeAreaView, TextInput } from "react-native";
-import { moviesApi } from "../api";
+import { StyleSheet, SafeAreaView, TextInput, Alert } from "react-native";
+import { moviesApi, tvApi } from "../api";
+import Loader from "../components/Loader";
+import HList from "../components/HList";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "black",
   },
   search_bar: {
     borderWidth: 2,
@@ -22,8 +24,28 @@ const styles = StyleSheet.create({
 
 const Search = () => {
   const [query, setQuery] = useState("");
+  const {
+    isLoading: moviesLoading,
+    data: moviesData,
+    refetch: moviesRefetch,
+  } = useQuery(["searchMovies", query], moviesApi.search, {
+    enabled: false,
+  });
+  const {
+    isLoading: tvLoading,
+    data: tvData,
+    refetch: tvRefetch,
+  } = useQuery(["searchTv", query], tvApi.search, { enabled: false });
   const handleChangText = (text: string) => setQuery(text);
-  console.log(query);
+  const onSubmit = () => {
+    if (query === "") {
+      return;
+    }
+    moviesRefetch();
+    tvRefetch();
+  };
+  console.log(moviesLoading || tvLoading);
+
   return (
     <SafeAreaView style={styles.container}>
       <TextInput
@@ -33,7 +55,13 @@ const Search = () => {
         placeholderTextColor="gray"
         returnKeyType="search"
         placeholder="Search"
+        onSubmitEditing={onSubmit}
       />
+      {moviesLoading || tvLoading ? <Loader /> : null}
+      {moviesData ? (
+        <HList title="Movie Results" data={moviesData.results} />
+      ) : null}
+      {tvData ? <HList title="Tv Results" data={tvData.results} /> : null}
     </SafeAreaView>
   );
 };

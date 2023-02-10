@@ -1,4 +1,6 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
+import { TouchableNativeFeedback } from "react-native";
 import styled from "styled-components/native";
 import Poster from "./Poster";
 import Votes from "./Votes";
@@ -25,15 +27,23 @@ const VMedia: React.FC<VMediaProps> = ({
   posterPath,
   originalTitle,
   voteAverage,
-}) => (
-  <Movie>
-    <Poster path={posterPath} />
-    <Title>
-      {originalTitle.slice(0, 13)}
-      {originalTitle.length > 13 ? "..." : null}
-    </Title>
-    <Votes votes={voteAverage} />
-  </Movie>
-);
+}) => {
+  const navigation = useNavigation();
+  const goToDetail = () => {
+    navigation.navigate("Stack", { screen: "Detail" });
+  };
+  return (
+    <TouchableNativeFeedback onPress={goToDetail}>
+      <Movie>
+        <Poster path={posterPath} />
+        <Title>
+          {originalTitle.slice(0, 13)}
+          {originalTitle.length > 13 ? "..." : null}
+        </Title>
+        <Votes votes={voteAverage} />
+      </Movie>
+    </TouchableNativeFeedback>
+  );
+};
 
 export default VMedia;
