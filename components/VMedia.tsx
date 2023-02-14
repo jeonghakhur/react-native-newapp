@@ -21,24 +21,41 @@ interface VMediaProps {
   posterPath: string;
   originalTitle: string;
   voteAverage: number;
+  originalName: string;
+  backdropPath: string;
+  overview: string;
 }
 
 const VMedia: React.FC<VMediaProps> = ({
   posterPath,
   originalTitle,
   voteAverage,
+  originalName,
+  backdropPath,
+  overview,
 }) => {
   const navigation = useNavigation();
   const goToDetail = () => {
-    navigation.navigate("Stack", { screen: "Detail" });
+    navigation.navigate("Stack", {
+      screen: "Detail",
+      params: {
+        originalTitle,
+        originalName,
+        posterPath,
+        backdropPath,
+        overview,
+      },
+    });
   };
+  const title = originalTitle ? originalTitle : originalName;
+
   return (
     <TouchableNativeFeedback onPress={goToDetail}>
       <Movie>
         <Poster path={posterPath} />
         <Title>
-          {originalTitle.slice(0, 13)}
-          {originalTitle.length > 13 ? "..." : null}
+          {title.slice(0, 13)}
+          {title.length > 13 ? "..." : null}
         </Title>
         <Votes votes={voteAverage} />
       </Movie>

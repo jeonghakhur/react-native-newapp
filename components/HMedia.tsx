@@ -42,6 +42,7 @@ interface HMediaProps {
   overview: string;
   releaseDate?: string;
   voteAverage?: number;
+  backdropPath: string;
 }
 
 const HMedia: React.FC<HMediaProps> = ({
@@ -50,10 +51,19 @@ const HMedia: React.FC<HMediaProps> = ({
   overview,
   releaseDate,
   voteAverage,
+  backdropPath,
 }) => {
   const navigation = useNavigation();
   const goToDetail = () => {
-    navigation.navigate("Stack", { screen: "Detail" });
+    navigation.navigate("Stack", {
+      screen: "Detail",
+      params: {
+        originalTitle,
+        posterPath,
+        backdropPath,
+        overview,
+      },
+    });
   };
 
   return (

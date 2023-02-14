@@ -6,16 +6,16 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-import styled from "styled-components/native";
+import styled from "styled-components";
 import { makeImgPath } from "../utils";
 import Poster from "./Poster";
 
 const BgImg = styled.Image``;
 
-const Title = styled.Text<{ isDark: boolean }>`
+const Title = styled.Text`
   font-size: 16px;
   font-weight: 600;
-  color: ${(props) => (props.isDark ? "white" : props.theme.textColor)};
+  color: ${(p) => p.theme.textColor};
 `;
 const Wrapper = styled.View`
   flex-direction: row;
@@ -62,7 +62,10 @@ const Slide: React.FC<SlideProps> = ({
   const isDark = useColorScheme() === "dark";
   const navigation = useNavigation();
   const goToDetail = () => {
-    navigation.navigate("Stack", { screen: "Detail" });
+    navigation.navigate("Stack", {
+      screen: "Detail",
+      params: { originalTitle, posterPath, backdropPath, overview },
+    });
   };
   return (
     <TouchableWithoutFeedback onPress={goToDetail}>
@@ -87,5 +90,17 @@ const Slide: React.FC<SlideProps> = ({
     </TouchableWithoutFeedback>
   );
 };
+
+interface SearchFunc {
+  (source: string, subString: string): string;
+}
+
+let mySearch: SearchFunc;
+mySearch = function (src, sub) {
+  let result = src.search(sub);
+  return "string";
+};
+
+mySearch("abc", "b");
 
 export default Slide;

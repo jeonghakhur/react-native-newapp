@@ -5,6 +5,11 @@ import { useQuery, useQueryClient } from "react-query";
 import { tvApi } from "../api";
 import HList from "../components/HList";
 import Loader from "../components/Loader";
+import styled from "styled-components/native";
+
+const Container = styled.ScrollView`
+  background-color: ${(props) => props.theme.mainBgColor};
+`;
 
 const Tv = () => {
   const queryClient = useQueryClient();
@@ -32,7 +37,7 @@ const Tv = () => {
     return <Loader />;
   }
   return (
-    <ScrollView
+    <Container
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
@@ -41,7 +46,7 @@ const Tv = () => {
       <HList title="Trending TV" data={trendingData.results} />
       <HList title="Airing Today" data={todayData.results} />
       <HList title="Top Rated TV" data={topData.results} />
-    </ScrollView>
+    </Container>
   );
 };
 export default Tv;

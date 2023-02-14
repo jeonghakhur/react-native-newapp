@@ -53,6 +53,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
       originalTitle={index + " " + item.original_title}
       overview={item.overview}
       releaseDate={item.release_date}
+      backdropPath={item.backdrop_path}
     />
   );
   const movieKeyExtractor = (item: any) => item.id;

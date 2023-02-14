@@ -27,6 +27,7 @@ interface BaseResponse {
 export interface MovieResponse extends BaseResponse {
   results: Movie[];
 }
+
 export const moviesApi = {
   trending: () =>
     fetch(`${BASE_URL}/trending/movie/week?api_key=${API_KEY}`).then((res) =>

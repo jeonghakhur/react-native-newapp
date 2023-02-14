@@ -6,7 +6,7 @@ import * as Font from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import Root from "./navigation/Root";
 import { ThemeProvider } from "styled-components/native";
-import { darkTheme, lightTheme } from "./styled";
+import { lightTheme, darkTheme } from "./styled";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 SplashScreen.preventAutoHideAsync();
