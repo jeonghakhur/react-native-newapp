@@ -45,6 +45,7 @@ const ViewTint = styled.View<{ isDark: boolean }>`
 `;
 
 interface SlideProps {
+  id: number;
   backdropPath: string;
   posterPath: string;
   originalTitle: string;
@@ -53,6 +54,7 @@ interface SlideProps {
 }
 
 const Slide: React.FC<SlideProps> = ({
+  id,
   backdropPath,
   posterPath,
   originalTitle,
@@ -64,7 +66,7 @@ const Slide: React.FC<SlideProps> = ({
   const goToDetail = () => {
     navigation.navigate("Stack", {
       screen: "Detail",
-      params: { originalTitle, posterPath, backdropPath, overview },
+      params: { id, originalTitle, posterPath, backdropPath, overview },
     });
   };
   return (

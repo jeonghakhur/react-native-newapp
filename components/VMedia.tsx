@@ -18,6 +18,7 @@ const Title = styled.Text`
 `;
 
 interface VMediaProps {
+  id: number;
   posterPath: string;
   originalTitle: string;
   voteAverage: number;
@@ -27,6 +28,7 @@ interface VMediaProps {
 }
 
 const VMedia: React.FC<VMediaProps> = ({
+  id,
   posterPath,
   originalTitle,
   voteAverage,
@@ -39,6 +41,7 @@ const VMedia: React.FC<VMediaProps> = ({
     navigation.navigate("Stack", {
       screen: "Detail",
       params: {
+        id,
         originalTitle,
         originalName,
         posterPath,

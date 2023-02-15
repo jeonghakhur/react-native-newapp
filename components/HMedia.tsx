@@ -37,6 +37,7 @@ const Title = styled.Text`
 `;
 
 interface HMediaProps {
+  id: number;
   posterPath: string;
   originalTitle: string;
   overview: string;
@@ -46,6 +47,7 @@ interface HMediaProps {
 }
 
 const HMedia: React.FC<HMediaProps> = ({
+  id,
   posterPath,
   originalTitle,
   overview,
@@ -58,6 +60,7 @@ const HMedia: React.FC<HMediaProps> = ({
     navigation.navigate("Stack", {
       screen: "Detail",
       params: {
+        id,
         originalTitle,
         posterPath,
         backdropPath,

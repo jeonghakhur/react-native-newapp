@@ -2,6 +2,7 @@ import React from "react";
 import { FlatList } from "react-native-gesture-handler";
 import styled from "styled-components/native";
 import VMedia from "./VMedia";
+import { Movie, TV } from "../api";
 
 const ListContainer = styled.View`
   margin-bottom: 40px;
@@ -21,7 +22,7 @@ export const HListSeparator = styled.View`
 
 interface HListProps {
   title: string;
-  data: any[];
+  data: Movie[] | TV[];
 }
 
 const HList: React.FC<HListProps> = ({ title, data }) => (
@@ -36,11 +37,12 @@ const HList: React.FC<HListProps> = ({ title, data }) => (
       keyExtractor={(item) => item.id + ""}
       renderItem={({ item }) => (
         <VMedia
-          posterPath={item.poster_path}
+          id={item.id}
+          posterPath={item.poster_path || ""}
           originalTitle={item.original_title}
           originalName={item.original_name}
           voteAverage={item.vote_average}
-          backdropPath={item.backdrop_path}
+          backdropPath={item.backdrop_path || ""}
           overview={item.overview}
         />
       )}
